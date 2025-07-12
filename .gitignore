@@ -1,0 +1,19 @@
+# === Build artifacts ===
+*.o
+*.a
+*.so
+*.out
+*.exe
+
+# === Example binaries ===
+.build/
+
+# === VSCode settings (optional) ===
+.vscode/
+
+# === Backup files ===
+*~
+*.swp
+
+# === Mac / Linux DS_Store ===
+.DS_Store
