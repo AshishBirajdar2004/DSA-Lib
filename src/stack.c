@@ -20,8 +20,8 @@ void Stack_destroy(Stack* stack) {
 }
 
 int Stack_isEmpty(Stack* stack) {
-    if (!stack) return STACK_ERR;
-    return stack->list->head ==  NULL;
+    if (!stack) return 1;
+    return stack->list->length ==  0;
 }
 
 int Stack_isFull(Stack* stack) {
@@ -43,5 +43,6 @@ int Stack_pop(Stack* stack) {
 
 int Stack_peek(Stack* stack, void* dataOut) {
     if (!stack || !dataOut) return STACK_ERR;
+    if (Stack_isEmpty(stack)) return STACK_ERR;
     return List_getAt(stack->list, 1, dataOut);
 }
