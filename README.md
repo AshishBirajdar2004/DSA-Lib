@@ -80,5 +80,3 @@ If you don’t want to install system-wide, you can also just keep the **include
 ```bash
 gcc foo.c libdsa.a -Iinclude -o foo
 ```
-
----
