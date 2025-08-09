@@ -26,8 +26,6 @@ void List_destroy(List* list)
 
 static ListNode* _List_getNewNode(List* list, void* data)
 {
-    if (!list || !data) return NULL;
-
     ListNode* newNode = (ListNode* )malloc(sizeof(ListNode));
     if (!newNode) return NULL;
 
@@ -43,23 +41,23 @@ static ListNode* _List_getNewNode(List* list, void* data)
     return newNode;
 }
 
-int List_insertAtHead(List* list, void* data)
+STATUS List_insertAtHead(List* list, void* data)
 {
-    if (!list || !data) return LIST_ERR;
+    if (!list || !data) return STATUS_ERR_INVALID_ARGUMENT;
 
     ListNode* newNode = _List_getNewNode(list, data);
-    if (!newNode) return LIST_ERR;
+    if (!newNode) return STATUS_ERR_ALLOC;
 
     newNode->next = list->head;
     list->head = newNode;
     list->length++;
-    return LIST_OK;
+    return STATUS_OK;
 }
 
-int List_removeAt(List* list, size_t index)
+STATUS List_removeAt(List* list, size_t index)
 {
     if (!list || !list->head || index < 1 || index > list->length)
-        return LIST_ERR;
+        return STATUS_ERR_INVALID_ARGUMENT;
 
     ListNode* temp1 = list->head;
 
@@ -69,7 +67,7 @@ int List_removeAt(List* list, size_t index)
         free(temp1->data);
         free(temp1);
         list->length--;
-        return LIST_OK;
+        return STATUS_OK;
     }
 
     for (size_t i = 1; i < index - 1; i++)
@@ -80,7 +78,7 @@ int List_removeAt(List* list, size_t index)
     free(temp2->data);
     free(temp2);
     list->length--;
-    return LIST_OK;
+    return STATUS_OK;
 }
 
 size_t List_search(List* list, void* key, int (*cmp)(void*, void*)) {
@@ -100,26 +98,30 @@ size_t List_search(List* list, void* key, int (*cmp)(void*, void*)) {
     return 0; // Not found
 }
 
-int List_getAt(List* list, size_t index, void* dataOut) {
-    if (!list || !list->head || !dataOut) return LIST_ERR;
-    if (index < 1 || index > list->length) return LIST_ERR;
+STATUS List_getAt(List* list, size_t index, void* dataOut) {
+    if (!list || !list->head || !dataOut) 
+        return STATUS_ERR_INVALID_ARGUMENT;
+    if (index < 1 || index > list->length) 
+        return STATUS_ERR_INVALID_ARGUMENT;
 
     ListNode* temp = list->head;
     for (size_t i = 1; i < index; i++)
         temp = temp->next;
 
     memcpy(dataOut, temp->data, list->dataSize);
-    return LIST_OK;
+    return STATUS_OK;
 }
 
-void List_forEach(List* list, void (*callback)(void*)) 
+STATUS List_forEach(List* list, void (*callback)(void*)) 
 {
-    if (!list || !callback) return;
+    if (!list || !callback) return STATUS_ERR_INVALID_ARGUMENT;
     
     ListNode* current = list->head;
     while (current != NULL)
     {
         callback(current->data);
         current = current->next;
-    }   
+    }
+    
+    return STATUS_OK;
 }

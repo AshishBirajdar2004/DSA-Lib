@@ -1,12 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <stdlib.h>
-#include <string.h>
-#include <stddef.h>
-
-#define LIST_OK 1
-#define LIST_ERR 0
+#include "common.h"
 
 /**
  * ListNode structure for the linked list.
@@ -50,7 +45,7 @@ void List_destroy(List* list);
  * @param data Pointer to data to insert.
  * @return LIST_OK or LIST_ERR.
  */
-int List_insertAtHead(List* list, void* data);
+STATUS List_insertAtHead(List* list, void* data);
 
 /**
  * Delete a node from a given index (1-based index).
@@ -58,7 +53,7 @@ int List_insertAtHead(List* list, void* data);
  * @param index Position to delete.
  * @return LIST_OK or LIST_ERR.
  */
-int List_removeAt(List* list, size_t index);
+STATUS List_removeAt(List* list, size_t index);
 
 /**
  * Search for an element in the list (1-based index).
@@ -78,13 +73,13 @@ size_t List_search(List* list, void* key, int (*cmp)(void*, void*));
  * @param dataOut Pointer to a buffer where the element's data will be copied.
  * @return LIST_OK or LIST_ERR.
  */
-int List_getAt(List* list, size_t index, void* dataOut);
+STATUS List_getAt(List* list, size_t index, void* dataOut);
 
 /**
  * Apply a callback function to each node's data.
  * @param list Pointer to the List.
  * @param callback Function to run for each node's data.
  */
-void List_forEach(List* list, void (*callback)(void*));
+STATUS List_forEach(List* list, void (*callback)(void*));
 
 #endif
