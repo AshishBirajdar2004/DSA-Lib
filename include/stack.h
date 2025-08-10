@@ -1,12 +1,8 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include <stddef.h>
-#include <stdlib.h>
+#include "common.h"
 #include "list.h"
-
-#define STACK_OK 1
-#define STACK_ERR 0
 
 /**
  * Stack - Generic stack built on top of linked list.
@@ -37,14 +33,14 @@ void Stack_destroy(Stack* stack);
  * @param data: Pointer to the element to push.
  * @returns STACK_OK or STACK_ERR.
  */
-int Stack_push(Stack* stack, void* data);
+STATUS Stack_push(Stack* stack, void* data);
 
 /**
  * Stack_pop - Remove the top element from the stack.
  * @param stack: Pointer to the Stack.
  * @returns STACK_OK or STACK_ERR.
  */
-int Stack_pop(Stack* stack);
+STATUS Stack_pop(Stack* stack);
 
 /**
  * Stack_peek - Get the top element without removing it.
@@ -52,20 +48,20 @@ int Stack_pop(Stack* stack);
  * @param dataOut: Pointer to store the top element.
  * @returns STACK_OK or STACK_ERR.
  */
-int Stack_peek(Stack* stack, void* dataOut);
+STATUS Stack_peek(Stack* stack, void* dataOut);
 
 /**
  * Stack_isEmpty - Check if the stack is empty.
  * @param stack: Pointer to the Stack.
  * @returns non-zero if empty, zero if not.
  */
-int Stack_isEmpty(Stack* stack);
+bool Stack_isEmpty(Stack* stack);
 
 /**
  * Stack_isFull - Check if the stack is full.
  * @param stack: Pointer to the Stack.
  * @returns non-zero if full, zero if not.
  */
-int Stack_isFull(Stack* stack);
+bool Stack_isFull(Stack* stack);
 
 #endif /* STACK_H */

@@ -19,30 +19,30 @@ void Stack_destroy(Stack* stack) {
     free(stack);
 }
 
-int Stack_isEmpty(Stack* stack) {
-    if (!stack) return 1;
+bool Stack_isEmpty(Stack* stack) {
+    if (!stack) return true;
     return stack->list->length ==  0;
 }
 
-int Stack_isFull(Stack* stack) {
-    if (!stack) return STACK_ERR;
+bool Stack_isFull(Stack* stack) {
+    if (!stack) return false;
     return stack->list->length == stack->stackSize;
 }
 
-int Stack_push(Stack* stack, void* data) {
-    if (!stack || !data) return STACK_ERR;
-    if (Stack_isFull(stack)) return STACK_ERR;
+STATUS Stack_push(Stack* stack, void* data) {
+    if (!stack || !data) return STATUS_ERR_INVALID_ARGUMENT;
+    if (Stack_isFull(stack)) return STATUS_ERR_OVERFLOW;
     return List_insertAtHead(stack->list, data);
 }
 
-int Stack_pop(Stack* stack) {
-    if (!stack) return STACK_ERR;
-    if (Stack_isEmpty(stack)) return STACK_ERR;
+STATUS Stack_pop(Stack* stack) {
+    if (!stack) return STATUS_ERR_INVALID_ARGUMENT;
+    if (Stack_isEmpty(stack)) return STATUS_ERR_UNDERFLOW;
     return List_removeAt(stack->list, 1);
 }
 
-int Stack_peek(Stack* stack, void* dataOut) {
-    if (!stack || !dataOut) return STACK_ERR;
-    if (Stack_isEmpty(stack)) return STACK_ERR;
+STATUS Stack_peek(Stack* stack, void* dataOut) {
+    if (!stack || !dataOut) return STATUS_ERR_INVALID_ARGUMENT;
+    if (Stack_isEmpty(stack)) return STATUS_ERR_EMPTY;
     return List_getAt(stack->list, 1, dataOut);
 }
