@@ -102,10 +102,14 @@ STATUS LinkedList_insert(LinkedList* list, void* element)
 
 STATUS LinkedList_delete(LinkedList* list, size_t index)
 {
-    if (!list || index < 1 || index > list->size)
+    if (!list)
         return STATUS_ERR_INVALID_ARGUMENT;
+    
+    if (list->size == 0)
+        return STATUS_ERR_UNDERFLOW;
 
-    if (list->size == 0) return STATUS_ERR_UNDERFLOW;
+    if (index < 1 || index > list->size)
+        return STATUS_ERR_INVALID_ARGUMENT;
 
     ListNode* temp1 = list->head;
     ListNode* temp2 = NULL;
