@@ -1,21 +1,5 @@
 #include "../include/arraylist.h"
 
-// --- Internal Constants ---
-
-/**
- * @brief The default initial capacity for a list created with a capacity of 0.
- * This prevents frequent reallocations when starting with an empty list.
- */
-#define DEFAULT_CAPACITY 8
-
-/**
- * @brief The factor by which the list's capacity will grow when it's full.
- * A factor of 2 is a common choice that provides good amortized performance.
- */
-#define DEFAULT_EXPANSION_FACTOR 2
-
-// --- Struct Definition ---
-
 /**
  * @brief The internal structure of the ArrayList.
  * @details This struct holds all the necessary state for the list, including
@@ -30,7 +14,42 @@ struct ArrayList
     void* data;      // A void pointer to the contiguous block of memory for the elements.
 };
 
-// --- Function Implementations ---
+/** @internal Constants */
+
+/**
+ * @brief The default initial capacity for a list created with a capacity of 0.
+ * This prevents frequent reallocations when starting with an empty list.
+ */
+#define DEFAULT_CAPACITY 8
+
+/**
+ * @brief The factor by which the list's capacity will grow when it's full.
+ * A factor of 2 is a common choice that provides good amortized performance.
+ */
+#define DEFAULT_EXPANSION_FACTOR 2
+
+/* --------------------------- Private Helper Functions --------------------------- */
+
+/**
+ * @internal
+ * @brief Internal helper to reallocate the data buffer of the ArrayList.
+ * @param arrayList A pointer to the ArrayList.
+ * @param newCapacity The desired new capacity.
+ * @return `true` on successful reallocation, `false` otherwise.
+ */
+static bool _ArrayList_realloc(ArrayList* arrayList, size_t newCapacity)
+{
+    void* newData = realloc(arrayList->data, newCapacity * arrayList->dataSize);
+    if (!newData)
+        return false; // Reallocation failed; the original block is still valid.
+
+    // On success, update the data pointer and the capacity.
+    arrayList->data = newData;
+    arrayList->capacity = newCapacity;
+    return true;
+}
+
+/* ----------------------------- Public API Functions ----------------------------- */
 
 ArrayList* ArrayList_init(size_t capacity, size_t dataSize)
 {
@@ -71,24 +90,6 @@ void ArrayList_destroy(ArrayList* arrayList)
     arrayList->data = NULL;
 
     free(arrayList);
-}
-
-/**
- * @brief Internal helper to reallocate the data buffer of the ArrayList.
- * @param arrayList A pointer to the ArrayList.
- * @param newCapacity The desired new capacity.
- * @return `true` on successful reallocation, `false` otherwise.
- */
-static bool _ArrayList_realloc(ArrayList* arrayList, size_t newCapacity)
-{
-    void* newData = realloc(arrayList->data, newCapacity * arrayList->dataSize);
-    if (!newData)
-        return false; // Reallocation failed; the original block is still valid.
-
-    // On success, update the data pointer and the capacity.
-    arrayList->data = newData;
-    arrayList->capacity = newCapacity;
-    return true;
 }
 
 STATUS ArrayList_insert(ArrayList* arrayList, void* element)
@@ -220,4 +221,20 @@ STATUS ArrayList_forEach(ArrayList* arrayList, void (*callBack)(void* ))
         callBack(element);
     }
     return STATUS_OK;
+}
+
+size_t ArrayList_size(const ArrayList* arrayList)
+{
+    if (!arrayList) {
+        return 0;
+    }
+    return arrayList->size;
+}
+
+size_t ArrayList_capacity(const ArrayList* arrayList)
+{
+    if (!arrayList) {
+        return 0;
+    }
+    return arrayList->capacity;
 }
