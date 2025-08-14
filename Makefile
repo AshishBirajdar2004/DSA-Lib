@@ -6,8 +6,8 @@ SRC_DIR = src
 BUILD_DIR = .build
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC))
-EXAMPLES = $(wildcard examples/*.c)
-EXE = $(patsubst examples/%.c, $(BUILD_DIR)/%, $(EXAMPLES))
+TESTS = $(wildcard test/*.c)
+EXE = $(patsubst test/%.c, $(BUILD_DIR)/%, $(TESTS))
 
 # === Build static lib ===
 all: $(LIB)
@@ -18,13 +18,13 @@ $(LIB): $(OBJ)
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# === Build all examples ===
-examples: $(EXE)
+# === Build all tests ===
+tests: $(EXE)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-$(BUILD_DIR)/%: examples/%.c $(LIB) | $(BUILD_DIR)
+$(BUILD_DIR)/%: test/%.c $(LIB) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $< -L. -ldsa -o $@
 
 # === Install / Uninstall ===
@@ -48,4 +48,4 @@ uninstall:
 clean:
 	rm -rf $(BUILD_DIR) $(LIB)
 
-.PHONY: all examples clean install uninstall
+.PHONY: all tests clean install uninstall
