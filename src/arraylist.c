@@ -127,11 +127,14 @@ STATUS ArrayList_insert(ArrayList* arrayList, void* element)
 
 STATUS ArrayList_delete(ArrayList* arrayList, size_t index)
 {
-    if (!arrayList || index >= arrayList->size)
+    if (!arrayList)
         return STATUS_ERR_INVALID_ARGUMENT;
 
     if (arrayList->size == 0)
         return STATUS_ERR_UNDERFLOW;
+
+    if (index >= arrayList->size)
+        return STATUS_ERR_INVALID_ARGUMENT;
 
     // To "delete" an element, we shift all subsequent elements one position to the left.
     // `memmove` is used because the source and destination memory regions overlap.
