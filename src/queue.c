@@ -61,5 +61,5 @@ STATUS Queue_peek(Queue* queue, void* elementOut)
 
     // PERFORMANCE NOTE: Peeking the front of the queue requires getting the tail
     // of the list. This is an O(n) operation in this implementation.
-    return List_getAt(queue->list, LinkedList_size(queue->list), elementOut);
+    return LinkedList_get(queue->list, LinkedList_size(queue->list), elementOut);
 }
