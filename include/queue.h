@@ -1,62 +1,75 @@
+/**
+ * @file queue.h
+ * @brief Public API for a generic queue data structure.
+ *
+ * This file defines the interface for a generic queue data structure.
+ * It is implemented as an adapter over the existing LinkedList module,
+ * providing classic FIFO (First-In, First-Out) operations.
+ */
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include <stddef.h>
-#include <stdlib.h>
-#include "list.h"
-
-#define QUEUE_OK 1
-#define QUEUE_ERR 0
+#include "common.h"
+#include "linkedlist.h"
 
 /**
- * Queue - Generic FIFO queue built on top of linked list.
- * Holds underlying linked list.
+ * @struct Queue
+ * @brief An opaque struct representing the Queue data structure.
+ *
+ * The internal details are hidden to encapsulate the implementation.
+ * Users should interact with the Queue only through the public API functions defined in this file.
  */
-typedef struct {
-    List* list;
-} Queue;
+typedef struct Queue Queue;
 
 /**
- * Queue_init - Initialize a new Queue.
- * @param dataSize: Size of each element in bytes.
- * @returns Pointer to new Queue or NULL on failure.
+ * @brief Initializes a new, empty queue.
+ * @param dataSize The size in bytes of each element to be stored (e.g., `sizeof(int)`).
+ * @return A pointer to the newly created Queue, or `NULL` on allocation failure.
  */
 Queue* Queue_init(size_t dataSize);
 
 /**
- * Queue_destroy - Free the Queue and its internal data.
- * @param queue: Pointer to the Queue.
+ * @brief Frees all memory associated with the queue.
+ * @details Deallocates the underlying LinkedList and the Queue struct itself.
+ * The queue pointer becomes invalid after this call.
+ * @param queue A pointer to the queue to be destroyed.
  */
 void Queue_destroy(Queue* queue);
 
 /**
- * Queue_enqueue - Add an element to the rear of the Queue.
- * @param queue: Pointer to the Queue.
- * @param data: Pointer to the element to add.
- * @returns QUEUE_OK or QUEUE_ERR.
+ * @brief Adds an element to the back of the queue.
+ * @param queue A pointer to the queue.
+ * @param data A pointer to the element data to be copied into the queue.
+ * @return `STATUS_OK` on success.
+ * @return `STATUS_ERR_INVALID_ARGUMENT` if queue or data is NULL.
+ * @return `STATUS_ERR_ALLOC` if memory allocation fails.
  */
-int Queue_enqueue(Queue* queue, void* data);
+STATUS Queue_enqueue(Queue* queue, void* data);
 
 /**
- * Queue_dequeue - Remove the front element from the Queue.
- * @param queue: Pointer to the Queue.
- * @returns QUEUE_OK or QUEUE_ERR.
+ * @brief Removes the element from the front of the queue.
+ * @param queue A pointer to the queue.
+ * @return `STATUS_OK` on success.
+ * @return `STATUS_ERR_INVALID_ARGUMENT` if the queue is NULL.
+ * @return `STATUS_ERR_UNDERFLOW` if the queue is empty.
  */
-int Queue_dequeue(Queue* queue);
+STATUS Queue_dequeue(Queue* queue);
 
 /**
- * Queue_peek - Get the front element without removing it.
- * @param queue: Pointer to the Queue.
- * @param dataOut: Pointer to store the front element.
- * @returns QUEUE_OK or QUEUE_ERR.
+ * @brief Retrieves a copy of the front element without removing it.
+ * @param queue A pointer to the queue.
+ * @param dataOut A pointer to a memory location where the front element's data will be copied.
+ * @return `STATUS_OK` on success.
+ * @return `STATUS_ERR_INVALID_ARGUMENT` if queue or dataOut is NULL.
+ * @return `STATUS_ERR_EMPTY` if the queue is empty.
  */
-int Queue_peek(Queue* queue, void* dataOut);
+STATUS Queue_peek(Queue* queue, void* dataOut);
 
 /**
- * Queue_isEmpty - Check if the Queue is empty.
- * @param queue: Pointer to the Queue.
- * @returns non-zero if empty, zero if not.
+ * @brief Checks if the queue is empty.
+ * @param queue A pointer to the queue.
+ * @return `true` if the queue has no elements, `false` otherwise. Returns `true` if queue is NULL.
  */
-int Queue_isEmpty(Queue* queue);
+bool Queue_isEmpty(Queue* queue);
 
 #endif /* QUEUE_H */
