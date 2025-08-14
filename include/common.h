@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 /**
  * Generic status codes for data structure operations
