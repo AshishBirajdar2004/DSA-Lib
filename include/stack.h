@@ -1,66 +1,83 @@
+/**
+ * @file stack.h
+ * @brief Public API for a generic, bounded stack data structure.
+ *
+ * This file defines the interface for a generic stack with a fixed capacity.
+ * It is implemented as an adapter over the existing LinkedList data structure,
+ * providing classic LIFO (Last-In, First-Out) operations.
+ */
 #ifndef STACK_H
 #define STACK_H
 
 #include "common.h"
-#include "list.h"
+#include "linkedlist.h"
 
 /**
- * Stack - Generic stack built on top of linked list.
- * Holds underlying linked list and max stack capacity.
+ * @struct Stack
+ * @brief An opaque struct representing the Stack data structure.
+ *
+ * The internal details are hidden to encapsulate the implementation.
+ * Users should interact with the Stack only through the public API functions defined in this file.
  */
-typedef struct {
-    List* list;         
-    size_t stackSize;
-} Stack;
+typedef struct Stack Stack;
 
 /**
- * Stack_init - Initialize a new Stack.
- * @param dataSize: Size of each element in bytes.
- * @param stackSize: Maximum capacity of the stack.
- * @returns Pointer to new Stack, or NULL on failure.
+ * @brief Initializes a new, empty stack with a specified maximum size.
+ * @param dataSize The size in bytes of each element to be stored (e.g., `sizeof(int)`).
+ * @param stackSize The maximum number of elements the stack can hold.
+ * @return A pointer to the newly created Stack, or `NULL` on allocation failure.
  */
 Stack* Stack_init(size_t dataSize, size_t stackSize);
 
 /**
- * Stack_destroy - Free the Stack and its internal data.
- * @param stack: Pointer to the Stack.
+ * @brief Frees all memory associated with the stack.
+ * @details Deallocates the underlying LinkedList and the Stack struct itself.
+ * The stack pointer becomes invalid after this call.
+ * @param stack A pointer to the stack to be destroyed.
  */
 void Stack_destroy(Stack* stack);
 
 /**
- * Stack_push - Push an element onto the stack.
- * @param stack: Pointer to the Stack.
- * @param data: Pointer to the element to push.
- * @returns STACK_OK or STACK_ERR.
+ * @brief Adds an element to the top of the stack.
+ * @param stack A pointer to the stack.
+ * @param element A pointer to the element data to be copied onto the stack.
+ * @return `STATUS_OK` on success.
+ * @return `STATUS_ERR_INVALID_ARGUMENT` if stack or data is NULL.
+ * @return `STATUS_ERR_ALLOC` if memory allocation for the LinkedList fails.
+ * @return `STATUS_ERR_OVERFLOW` if the stack is full.
  */
-STATUS Stack_push(Stack* stack, void* data);
+STATUS Stack_push(Stack* stack, void* element);
 
 /**
- * Stack_pop - Remove the top element from the stack.
- * @param stack: Pointer to the Stack.
- * @returns STACK_OK or STACK_ERR.
+ * @brief Removes the top element from the stack.
+ * @param stack A pointer to the stack.
+ * @return `STATUS_OK` on success.
+ * @return `STATUS_ERR_INVALID_ARGUMENT` if the stack is NULL.
+ * @return `STATUS_ERR_UNDERFLOW` if the stack is empty.
  */
 STATUS Stack_pop(Stack* stack);
 
 /**
- * Stack_peek - Get the top element without removing it.
- * @param stack: Pointer to the Stack.
- * @param dataOut: Pointer to store the top element.
- * @returns STACK_OK or STACK_ERR.
+ * @brief Retrieves a copy of the top element without removing it.
+ * @param stack A pointer to the stack.
+ * @param dataOut A pointer to a memory location where the top element's data will be copied.
+ * @return `STATUS_OK` on success.
+ * @return `STATUS_ERR_INVALID_ARGUMENT` if stack or dataOut is NULL.
+ * @return `STATUS_ERR_EMPTY` if the stack is empty.
  */
 STATUS Stack_peek(Stack* stack, void* dataOut);
 
 /**
- * Stack_isEmpty - Check if the stack is empty.
- * @param stack: Pointer to the Stack.
- * @returns non-zero if empty, zero if not.
+ * @brief Checks if the stack is empty.
+ * @param stack A pointer to the stack.
+ * @return `true` if the stack has no elements, `false` otherwise. Returns `true` if stack is NULL.
  */
 bool Stack_isEmpty(Stack* stack);
 
 /**
- * Stack_isFull - Check if the stack is full.
- * @param stack: Pointer to the Stack.
- * @returns non-zero if full, zero if not.
+ * @brief Checks if the stack has reached its maximum capacity.
+ * @param stack A pointer to the stack.
+ * @return `true` if the number of elements equals the stack's maximum size, `false` otherwise.
  */
 bool Stack_isFull(Stack* stack);
 
