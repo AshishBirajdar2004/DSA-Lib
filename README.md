@@ -32,13 +32,13 @@ This will:
 
 **Note:** sudo is required to install the library system-wide under /usr/local.
 
-**Running tests:**
+**Running examples:**
 
-This will compile all test programs into the .build/ directory. To run an test, execute its corresponding binary. For example:
+This will compile all example programs into the build/ directory. To run an example, execute its corresponding binary. For example:
 
 ```bash
-make tests
-.build/arraylist-test
+make examples
+build/list-example
 ```
 
 **Uninstall:**
@@ -54,7 +54,7 @@ sudo make uninstall
 1. Example usage in your own foo.c:
 
 ```c
-#include <dsa-lib/arraylist.h>
+#include <dsa-lib/list.h>
 ```
 
 2. Compile and link:
@@ -72,7 +72,7 @@ If you don’t want to install system-wide, you can also just keep the **include
 1. Example usage in your own foo.c:
 
 ```c
-#include "include/arraylist.h"
+#include "include/list.h"
 ```
 
 2. Compile and link:
